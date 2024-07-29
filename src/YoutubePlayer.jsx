@@ -79,11 +79,13 @@ const YouTubePlayer = ({codes}) => {
 const createClip = async (e) => {
 
     if (playerRef.current) {
-        const currentTime = parseFloat(playerRef.current.getCurrentTime());
+        const currentTime = parseFloat(playerRef.current.getCurrentTime().toFixed(2));
         const buttonValue = e.target.value;
         let padding = 10.00
         let formatedPadding = parseFloat(padding)
         const end_time = (currentTime + formatedPadding).toFixed(2)
+
+        console.log(currentTime,end_time)
         
         const response = await axios.post("http://127.0.0.1:8000/api/matchclips/", {
             match:matchId,

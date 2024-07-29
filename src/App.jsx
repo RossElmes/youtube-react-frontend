@@ -7,6 +7,7 @@ import Profile from './Profile';
 import MatchDetails from './MatchDetails';
 import YouTubePlayer from './YoutubePlayer';
 import AddMatchForm from './AddMatchForm';
+import EditMatchForm from './EditMatchForm';
 import { useState, useEffect } from "react";
 import { fetchTasks, fetchClips, fetchCodes ,fetchPlaylists} from "./utils"
 import Playlist from './Playlist';
@@ -39,6 +40,7 @@ function App() {
                 <Route path="/playlists" element={<Playlist playlists={playlists} setPlaylists={setPlaylists} />} />
                 <Route path="/video/:videoId/:matchId" element={<YouTubePlayer codes={codes} setCodes={setCodes} />} />
                 <Route path="/addmatch" element={<AddMatchForm tasks={tasks} setTasks={setTasks}/>} />
+                <Route path="/editmatch/:matchId" element={<EditMatchForm tasks={tasks} setTasks={setTasks}/>} />
             </Routes>
         </div>
     );

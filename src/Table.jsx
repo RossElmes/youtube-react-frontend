@@ -2,18 +2,11 @@
 
 import React from 'react';
 import './Table.css';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
 
 
-const Table = ({ headers, rows,setTasks }) => {
-
-// Function to delete a task
-const deleteClip = async (id,setTasks) => {
-  console.log(id)
-  await axios.delete(`http://127.0.0.1:8000/api/matchdetails/${id}/`);
-  setTasks((prevTasks) =>prevTasks.filter(prevTask => prevTask.id !== id));
-};
-
+const Table = ({ headers, rows,setTasks,deleteClip}) => {
 
   return (
     <table className="table">
@@ -31,7 +24,7 @@ const deleteClip = async (id,setTasks) => {
                 <td key={key}>{row[key]}</td>
               ))}
               <td>
-                <button onClick={() => deleteClip(row.id)}>Edit</button>
+              <Link to={`/editmatch/${row.id}`}>Edit</Link>
               </td>
               <td>
               <button onClick={() => deleteClip(row.id,setTasks)}>Delete</button>

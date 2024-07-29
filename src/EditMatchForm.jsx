@@ -1,12 +1,14 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import './Form.css';
 import axios from 'axios';
 import NavBar from './NavBar';
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams} from "react-router-dom";
 
-const AddMatchForm = ({ setTasks,tasks}) => {
+const EditMatchForm = ({setTasks,tasks}) => {
 
-  const [formData, setFormData] = useState({
+  const { matchId } = useParams();
+  const navigate = useNavigate();
+  const [match, setMatch] = useState({
     date_of_match: '',
     venue: '',
     team1: '',
@@ -19,35 +21,50 @@ const AddMatchForm = ({ setTasks,tasks}) => {
     home_team: 'Team1', // Default value
   });
 
-  const navigate = useNavigate();
+  const updateTask = (updatedTask) => {
+    setTasks((prevTasks) =>
+      prevTasks.map((task) =>
+        task.id === updatedTask.id ? updatedTask : task
+      )
+    );
+  };
+
+
+  const fetchMatch = async (id) => {
+    try {
+      const response = await axios.get(`http://127.0.0.1:8000/api/matchdetails/${id}/`)
+      setMatch(response.data);
+    } catch (error) {
+      console.error('Error fetching match:', error);
+    }
+  };
+
+  useEffect(() => {
+    fetchMatch(matchId);
+  }, [matchId]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    console.log(name,value)
-    setFormData({
-      ...formData,
-      [name]: value,
-    });
+    setMatch({ ...match, [name]: value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    createMatch(formData);
-    navigate('/matchdetails')
+    try {
+      const response = await axios.put(`http://127.0.0.1:8000/api/matchdetails/${matchId}/`, match);
+      updateTask(response.data);
+      navigate('/matchdetails');
+    } catch (error) {
+      console.error('Error updating match:', error);
+    }
   };
+
   
-  const createMatch = async (formData) => {
-    const response = await axios.post("http://127.0.0.1:8000/api/matchdetails/",formData);
-        setTasks([...tasks, response.data]);
-      };
-      // Function to create a new task
-
-
   return (
     <>
     <NavBar />
     <div className="form-container">
-      <h2>Add New Match</h2>
+      <h2>Edit Match</h2>
       <form onSubmit={handleSubmit}>
         <div className="form-group">
           <label htmlFor="date_of_match">Date of Match:</label>
@@ -55,7 +72,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="date"
             id="date_of_match"
             name="date_of_match"
-            value={formData.date_of_match}
+            value={match.date_of_match}
             onChange={handleChange}
           />
         </div>
@@ -65,7 +82,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="text"
             id="venue"
             name="venue"
-            value={formData.venue}
+            value={match.venue}
             onChange={handleChange}
           />
         </div>
@@ -75,7 +92,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="text"
             id="team1"
             name="team1"
-            value={formData.team1}
+            value={match.team1}
             onChange={handleChange}
           />
         </div>
@@ -85,7 +102,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="text"
             id="team2"
             name="team2"
-            value={formData.team2}
+            value={match.team2}
             onChange={handleChange}
           />
         </div>
@@ -95,7 +112,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="number"
             id="team1_score"
             name="team1_score"
-            value={formData.team1_score}
+            value={match.team1_score}
             onChange={handleChange}
           />
         </div>
@@ -105,7 +122,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="number"
             id="team2_score"
             name="team2_score"
-            value={formData.team2_score}
+            value={match.team2_score}
             onChange={handleChange}
           />
         </div>
@@ -114,7 +131,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
           <select
             id="result"
             name="result"
-            value={formData.result}
+            value={match.result}
             onChange={handleChange}
           >
             <option value="Team1">Team 1</option>
@@ -128,7 +145,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="text"
             id="youtube_link"
             name="youtube_link"
-            value={formData.youtube_link}
+            value={match.youtube_link}
             onChange={handleChange}
           />
         </div>
@@ -138,7 +155,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
             type="text"
             id="video_id"
             name="video_id"
-            value={formData.video_id}
+            value={match.video_id}
             onChange={handleChange}
           />
         </div>
@@ -147,7 +164,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
           <select
             id="home_team"
             name="home_team"
-            value={formData.home_team}
+            value={match.home_team}
             onChange={handleChange}
           >
             <option value="Team1">Team 1</option>
@@ -161,4 +178,4 @@ const AddMatchForm = ({ setTasks,tasks}) => {
   );
 };
 
-export default AddMatchForm;
+export default EditMatchForm;
