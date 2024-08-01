@@ -3,10 +3,8 @@
 import React from 'react';
 import './Table.css';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 
-
-const Table = ({ headers, rows,setTasks,deleteClip}) => {
+const PlaylistTable = ({ headers, rows,setPlaylists,deletePlaylists}) => {
 
   return (
     <table className="table">
@@ -24,10 +22,10 @@ const Table = ({ headers, rows,setTasks,deleteClip}) => {
                 <td key={key}>{row[key]}</td>
               ))}
               <td>
-              <Link to={`/editmatch/${row.id}`}>Edit</Link>
+                <Link to={`/playlistclips/${row.id}`}>Watch Clips</Link>
               </td>
               <td>
-              <button onClick={() => deleteClip(row.id,setTasks)}>Delete</button>
+              <button onClick={() => deletePlaylists(row.id,setPlaylists)}>Delete</button>
               </td>
             </tr>
           ))}
@@ -36,4 +34,4 @@ const Table = ({ headers, rows,setTasks,deleteClip}) => {
   );
 };
 
-export default Table;
+export default PlaylistTable;

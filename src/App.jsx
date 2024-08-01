@@ -1,4 +1,6 @@
 // src/App.jsx
+import "bootstrap/dist/css/bootstrap.min.css";
+import "font-awesome/css/font-awesome.min.css";
 
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
@@ -9,8 +11,10 @@ import YouTubePlayer from './YoutubePlayer';
 import AddMatchForm from './AddMatchForm';
 import EditMatchForm from './EditMatchForm';
 import { useState, useEffect } from "react";
-import { fetchTasks, fetchClips, fetchCodes ,fetchPlaylists} from "./utils"
+import { fetchTasks, fetchCodes ,fetchPlaylists} from "./utils"
 import Playlist from './Playlist';
+import Codes from "./Codes";
+import Playlistplayer from "./Playlistplayer";
 
 function App() {
 
@@ -38,9 +42,11 @@ function App() {
                 <Route path="/" element={<AuthForm />} />
                 <Route path="/matchdetails" element={<MatchDetails tasks={tasks} setTasks={setTasks} />} />
                 <Route path="/playlists" element={<Playlist playlists={playlists} setPlaylists={setPlaylists} />} />
-                <Route path="/video/:videoId/:matchId" element={<YouTubePlayer codes={codes} setCodes={setCodes} />} />
+                <Route path="/video/:videoId/:matchId" element={<YouTubePlayer codes={codes} setCodes={setCodes} playlists={playlists} />} />
                 <Route path="/addmatch" element={<AddMatchForm tasks={tasks} setTasks={setTasks}/>} />
                 <Route path="/editmatch/:matchId" element={<EditMatchForm tasks={tasks} setTasks={setTasks}/>} />
+                <Route path="/codes" element={<Codes codes={codes} setCodes={setCodes} />} />
+                <Route path="/playlistclips/:playlistId" element={<Playlistplayer playlists={playlists}/>} />
             </Routes>
         </div>
     );

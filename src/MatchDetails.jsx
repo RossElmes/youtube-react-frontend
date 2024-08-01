@@ -1,7 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import "font-awesome/css/font-awesome.min.css";
 import axios from 'axios';
-import Table from "./Table";
+import MatchDetailTable from "./MatchDetailsTable";
 import NavBar from "./NavBar";
 import { Link } from 'react-router-dom';
 
@@ -23,7 +23,7 @@ const deleteClip = async (id,setTasks) => {
     <NavBar />
     <div className="container pt-5">
     <Link to="/addmatch" className="add-button">Add New Match</Link>
-      <Table headers={headers} rows={tasks} setTasks={setTasks} deleteClip={deleteClip} />
+      <MatchDetailTable headers={headers} rows={tasks} setTasks={setTasks} deleteClip={deleteClip} />
     </div>
     </>
   );

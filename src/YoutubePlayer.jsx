@@ -1,23 +1,56 @@
 // src/YouTubePlayer.jsx
 
-import React, { useRef,useState,useEffect} from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import YouTube from 'react-youtube';
 import axios from "axios";
-import {fetchClips } from "./utils"
+import { fetchClips } from "./utils"
 import NavBar from './NavBar';
+import Playlist from './Playlist';
 
 
-const YouTubePlayer = ({codes}) => {
+const YouTubePlayer = ({codes,playlists}) => {
 
     const [clips, setClips] = useState([]);
     const playerRef = useRef(null);
-    const {matchId , videoId} = useParams();
+    const { matchId, videoId } = useParams();
+    const [distinctNames, setDistinctNames] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [mode, setMode] = useState('Code'); // Initial mode set to 'Code'
+    const [filteredData, setfilteredData] = useState('')
+    const [selectedPlaylist,setSelectedPlaylist] = useState('')
+
+    const toggleMode = () => {
+        setMode(prevMode => (prevMode === 'Code' ? 'Viewer' : 'Code'));
+    };
+
+    const buttonStyle = {
+        padding: '10px 20px',
+        fontSize: '16px',
+        cursor: 'pointer',
+        borderRadius: '5px',
+        backgroundColor: '#007bff',
+        color: '#fff',
+        border: 'none',
+      };
+
 
     // Fetch tasks from the API when the component mounts
     useEffect(() => {
-        fetchClips(setClips,matchId);
+        fetchClips(setClips, matchId);
+        setLoading(false)
+
     }, []);
+
+
+    useEffect(()=>{
+        const names = [...new Set(clips.map(clip => clip.name))];
+        setDistinctNames(names);
+        const data = clips.filter(item => item.name === names[0]);
+        setfilteredData(data)
+        setSelectedPlaylist(playlists[0])
+    },[mode])
 
 
     const opts = {
@@ -36,7 +69,8 @@ const YouTubePlayer = ({codes}) => {
         if (playerRef.current) {
             const currentTime = playerRef.current.getCurrentTime();
             const buttonValue = e.target.value;
-            console.log(buttonValue, currentTime);
+            console.log(playlists)
+            console.log(distinctNames)
         } else {
             console.error('Player reference is null');
         }
@@ -73,68 +107,140 @@ const YouTubePlayer = ({codes}) => {
         }
     }
 
+    const handleSelectChange = (e) => {
+        console.log(e.target.value)
+        const data = clips.filter(item => item.name === e.target.value);
+        setfilteredData(data)
+        console.log(data)
+    }
+
+    const handlePlaylistChange = (e) => {
+        console.log(e.target.value)
+        const data = playlists.filter(item => item.name === e.target.value);
+        setSelectedPlaylist(data[0])
+    }
 
 
     // Function to create a new task
-const createClip = async (e) => {
+    const createClip = async (e) => {
 
-    if (playerRef.current) {
-        const currentTime = parseFloat(playerRef.current.getCurrentTime().toFixed(2));
-        const buttonValue = e.target.value;
-        let padding = 10.00
-        let formatedPadding = parseFloat(padding)
-        const end_time = (currentTime + formatedPadding).toFixed(2)
+        if (playerRef.current) {
+            const currentTime = parseFloat(playerRef.current.getCurrentTime().toFixed(2));
+            const buttonValue = e.target.value;
+            let padding = 10.00
+            let formatedPadding = parseFloat(padding)
+            const end_time = (currentTime + formatedPadding).toFixed(2)
 
-        console.log(currentTime,end_time)
-        
-        const response = await axios.post("http://127.0.0.1:8000/api/matchclips/", {
-            match:matchId,
-            start_time:currentTime,
-            end_time:end_time,
-            name:buttonValue
-        });
-        setClips([...clips, response.data]);
-      };
+            console.log(currentTime, end_time)
+
+            const response = await axios.post("http://127.0.0.1:8000/api/matchclips/", {
+                match: matchId,
+                start_time: currentTime,
+                end_time: end_time,
+                name: buttonValue
+            });
+            setClips([...clips, response.data]);
+        };
     }
 
-// Function to delete a task
-const deleteClip = async (id) => {
-    console.log(id)
-    await axios.delete(`http://127.0.0.1:8000/api/matchclips/${id}/`);
-    setClips((prevClips) =>prevClips.filter(prevClip => prevClip.id !== id));
-  };
+    const addToPlaylist = async (clip,selectedPlaylist,videoId) => {
 
+        const data = {
+            clip:clip.id,
+            playlist:selectedPlaylist.id,
+            video_id: videoId
+        }
+
+        const response = await axios.post("http://127.0.0.1:8000/api/playlistclips/",data )
+        console.log(data)
+        
+        }
+
+
+
+    
+
+    // Function to delete a task
+    const deleteClip = async (id) => {
+        console.log(id)
+        await axios.delete(`http://127.0.0.1:8000/api/matchclips/${id}/`);
+        setClips((prevClips) => prevClips.filter(prevClip => prevClip.id !== id));
+    };
+
+    if (loading) return <div>Loading...</div>;
+    if (error) return <div>Error: {error.message}</div>;
 
     return (
         <>
-        <NavBar />
-        <div>
-            <YouTube videoId={videoId} opts={opts} onReady={onReady} />
-            <button onClick={getCurrentTime}>Get Current Time</button>
-            <button onClick={togglePlayPause}>Play/Pause</button>
-            <button onClick={skipBackward}>Skip Back 10s</button>
-            <button onClick={skipForward}>Skip Forward 10s</button>
-            <ul className="list-group mb-0">
-              {clips.map((clip) => (
-                <li
-                  key={clip.id}
-                  className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
-                  
-                >{`${clip.name} @ ${clip.start_time}`}
-                <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
-                <span className="fa fa-times text-danger" onClick={() => deleteClip(clip.id)} ></span>
-                </li>
-              ))}
-            </ul>
-            <ul className="list-group mb-0">
-              {codes.map((code) => (
-                  <button value={code.code} key={code.id} onClick={createClip}>
-                    {`${code.code}`}
-                  </button>
-              ))}
-            </ul>
-        </div>
-       </>
+            <NavBar />
+            <div style={{ marginBottom: '20px' }}>
+                <button onClick={toggleMode} style={buttonStyle}>
+                    Toggle to {mode === 'Code' ? 'Viewer' : 'Code'}
+                </button>
+            </div>
+            <div>
+                <YouTube videoId={videoId} opts={opts} onReady={onReady} />
+                {mode === 'Code' ? (
+                    <>
+                <button onClick={getCurrentTime}>Get Current Time</button>
+                <button onClick={togglePlayPause}>Play/Pause</button>
+                <button onClick={skipBackward}>Skip Back 10s</button>
+                <button onClick={skipForward}>Skip Forward 10s</button>
+                <ul className="list-group mb-0">
+                    {clips.map((clip) => (
+                        <li
+                            key={clip.id}
+                            className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
+
+                        >{`${clip.name} @ ${clip.start_time}`}
+                            <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
+                            <span className="fa fa-times text-danger" onClick={() => deleteClip(clip.id)} ></span>
+                        </li>
+                    ))}
+                </ul>
+                <ul className="list-group mb-0">
+                    {codes.map((code) => (
+                        <button value={code.code} key={code.id} onClick={createClip}>
+                            {`${code.code}`}
+                        </button>
+                    ))}
+                </ul>
+                </>
+                ):(<>
+                    <div>Viewer</div>
+                    <div>
+                    <label htmlFor="name-select">Select a name:</label>
+                    <select id="name-select" onChange={handleSelectChange}>
+                        {distinctNames.map((name, index) => (
+                            <option key={index} value={name}>
+                                {name}
+                            </option>
+                        ))}
+                    </select>
+                    <label htmlFor="playlist-select">Select a name:</label>
+                    <select id="playlist-select" onChange={handlePlaylistChange}>
+                        {playlists.map((playlist) => (
+                            <option key={playlist.id} value={playlist.name}>
+                                {playlist.name}
+                            </option>
+                        ))}
+                    </select>
+                    {filteredData.map((clip) => (
+                        <li
+                            key={clip.id}
+                            className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
+
+                        >{`${clip.name} @ ${clip.start_time}`}
+                            <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
+                            <button onClick={(e)=> addToPlaylist(clip,selectedPlaylist,videoId)}>Add to Playlist</button>
+                        </li>
+                    ))}
+                    
+                </div>
+                </>
+                )}
+            </div>
+        </>
     );
 };
 

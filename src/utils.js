@@ -1,5 +1,6 @@
 // Function to fetch tasks from the API
 import axios from "axios";
+import Playlist from "./Playlist";
 
 export async function fetchTasks(setTasks){
     const response = await axios.get("http://127.0.0.1:8000/api/matchdetails/");
@@ -15,6 +16,7 @@ export async function  fetchClips(setClips,match){
             }
     });
     const data = await response.data;
+    console.log(data)
     setClips(data);
 };
 
@@ -24,6 +26,22 @@ export async function  fetchCodes(setCodes){
     const response = await fetch("http://127.0.0.1:8000/api/codes/");
     const data = await response.json();
     setCodes(data);
+};
+
+
+
+
+// Function to fetch clips from the API
+export async function  fetchPlaylistClips(setPlaylistClips,playlistid,setVideoId){
+    const response = await axios.get("http://127.0.0.1:8000/api/playlistclips/",{      
+        params: {
+        playlist:playlistid
+        }
+    });
+    const data = await response.data;
+    setPlaylistClips(data);
+    setVideoId(data[0].video_id)
+    
 };
 
 export async function extractYouTubeId(url){
