@@ -9,17 +9,17 @@ import NavBar from './NavBar';
 import Playlist from './Playlist';
 
 
-const Playlistplayer = ({codes,playlists}) => {
+const Playlistplayer = ({ codes, playlists }) => {
 
     const [playlistClips, setPlaylistClips] = useState([]);
     const playerRef = useRef(null);
-    const {playlistId} = useParams();
-    const [videoId,setVideoId] = useState('')
+    const { playlistId } = useParams();
+    const [videoId, setVideoId] = useState('')
 
 
     // Fetch tasks from the API when the component mounts
     useEffect(() => {
-        fetchPlaylistClips(setPlaylistClips, playlistId,setVideoId);
+        fetchPlaylistClips(setPlaylistClips, playlistId, setVideoId);
 
     }, []);
 
@@ -62,13 +62,13 @@ const Playlistplayer = ({codes,playlists}) => {
 
             const time = clip.clip.start_time
 
-            if(videoId === clip.video_id){
+            if (videoId === clip.video_id) {
                 playerRef.current.seekTo(time)
-            }else{
+            } else {
                 setVideoId(clip.video_id)
-                playerRef.current.loadVideoById({videoId:clip.video_id,startSeconds:time,})
+                playerRef.current.loadVideoById({ videoId: clip.video_id, startSeconds: time, })
                 playerRef.current.playVideo()
-                
+
             }
         }
     }
@@ -83,16 +83,17 @@ const Playlistplayer = ({codes,playlists}) => {
 
 
     // Function to delete a task
-    const deleteClip = async (id) => {
+    const deletePlaylistClip = async (id) => {
         console.log(id)
-        await axios.delete(`http://127.0.0.1:8000/api/matchclips/${id}/`);
-        setClips((prevClips) => prevClips.filter(prevClip => prevClip.id !== id));
+        await axios.delete(`http://127.0.0.1:8000/api/playlistclips/${id}/`);
+        setPlaylistClips((prevplaylistClips) => prevplaylistClips.filter(prevplaylistClip => prevplaylistClip.id !== id));
     };
 
     return (
         <>
             <NavBar />
             <div>
+                
                 <YouTube videoId={videoId} opts={opts} onReady={onReady} />
                 <button onClick={getCurrentTime}>Get Current Time</button>
                 <button onClick={togglePlayPause}>Play/Pause</button>
@@ -105,9 +106,14 @@ const Playlistplayer = ({codes,playlists}) => {
 
                         >{`${clip.id} @ ${clip.playlist.name}`}
                             <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip)}></span>
+                            <span>
+                                <button type="button" class="btn btn-danger" onClick={()=> deletePlaylistClip(clip.id)}>
+                                    <i class="fas fa-trash-alt"></i> Delete
+                                </button>
+                            </span>
                         </li>
                     ))}
-                    </ul>
+                </ul>
             </div>
         </>
     );
