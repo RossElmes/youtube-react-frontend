@@ -15,6 +15,7 @@ import { fetchTasks, fetchCodes ,fetchPlaylists} from "./utils"
 import Playlist from './Playlist';
 import Codes from "./Codes";
 import Playlistplayer from "./Playlistplayer";
+import SplashPage from "./SplashPage";
 
 function App() {
 
@@ -39,7 +40,7 @@ function App() {
             <Routes>
                 <Route path="/login" element={<AuthForm />} />
                 <Route path="/profile" element={<Profile tasks={tasks} />} />
-                <Route path="/" element={<AuthForm />} />
+                <Route path="/" element={<SplashPage />} />
                 <Route path="/matchdetails" element={<MatchDetails tasks={tasks} setTasks={setTasks} />} />
                 <Route path="/playlists" element={<Playlist playlists={playlists} setPlaylists={setPlaylists} />} />
                 <Route path="/video/:videoId/:matchId" element={<YouTubePlayer codes={codes} setCodes={setCodes} playlists={playlists} />} />
