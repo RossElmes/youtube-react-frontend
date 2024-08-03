@@ -133,7 +133,7 @@ const YouTubePlayer = ({codes,playlists}) => {
 
             console.log(currentTime, end_time)
 
-            const response = await axios.post("http://127.0.0.1:8000/api/matchclips/", {
+            const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/matchclips/", {
                 match: matchId,
                 start_time: currentTime,
                 end_time: end_time,
@@ -151,7 +151,7 @@ const YouTubePlayer = ({codes,playlists}) => {
             video_id: videoId
         }
 
-        const response = await axios.post("http://127.0.0.1:8000/api/playlistclips/",data )
+        const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/playlistclips/",data )
         console.log(data)
         
         }
@@ -163,7 +163,7 @@ const YouTubePlayer = ({codes,playlists}) => {
     // Function to delete a task
     const deleteClip = async (id) => {
         console.log(id)
-        await axios.delete(`http://127.0.0.1:8000/api/matchclips/${id}/`);
+        await axios.delete(`https://youtubeplayer-django-api.onrender.com/api/matchclips/${id}/`);
         setClips((prevClips) => prevClips.filter(prevClip => prevClip.id !== id));
     };
 

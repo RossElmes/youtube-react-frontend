@@ -16,7 +16,7 @@ const Playlist = ({playlists,setPlaylists}) => {
   // Function to delete a task
   const deletePlaylists = async (id,setPlaylists) => {
     console.log(id)
-    await axios.delete(`http://127.0.0.1:8000/api/playlist/${id}/`);
+    await axios.delete(`https://youtubeplayer-django-api.onrender.com/api/playlist/${id}/`);
     setPlaylists((prevPlaylists) =>prevPlaylists.filter(prevPlaylist => prevPlaylist.id !== id));
   };
 
@@ -38,7 +38,7 @@ const Playlist = ({playlists,setPlaylists}) => {
   };
   
   const createPlaylist = async (Newplaylist) => {
-    const response = await axios.post("http://127.0.0.1:8000/api/playlist/",Newplaylist);
+    const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/playlist/",Newplaylist);
       setPlaylists([...playlists, response.data]);
       };
       // Function to create a new task

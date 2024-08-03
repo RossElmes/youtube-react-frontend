@@ -85,7 +85,7 @@ const Playlistplayer = ({ codes, playlists }) => {
     // Function to delete a task
     const deletePlaylistClip = async (id) => {
         console.log(id)
-        await axios.delete(`http://127.0.0.1:8000/api/playlistclips/${id}/`);
+        await axios.delete(`https://youtubeplayer-django-api.onrender.com/api/playlistclips/${id}/`);
         setPlaylistClips((prevplaylistClips) => prevplaylistClips.filter(prevplaylistClip => prevplaylistClip.id !== id));
     };
 

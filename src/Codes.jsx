@@ -16,7 +16,7 @@ const Codes = ({codes,setCodes}) => {
   // Function to delete a task
   const deleteCodes = async (id,setCodes) => {
     console.log(id)
-    await axios.delete(`http://127.0.0.1:8000/api/codes/${id}/`);
+    await axios.delete(`https://youtubeplayer-django-api.onrender.com/api/codes/${id}/`);
     setCodes((prevCodes) =>prevCodes.filter(prevCode => prevCode.id !== id));
   };
 
@@ -39,7 +39,7 @@ const Codes = ({codes,setCodes}) => {
   };
   
   const createCode = async (newCode) => {
-    const response = await axios.post("http://127.0.0.1:8000/api/codes/",newCode);
+    const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/codes/",newCode);
         setCodes([...codes, response.data]);
       };
       // Function to create a new task
