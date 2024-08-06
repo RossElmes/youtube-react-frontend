@@ -7,9 +7,10 @@ import axios from "axios";
 import { fetchClips } from "./utils"
 import NavBar from './NavBar';
 import Playlist from './Playlist';
+import './Youtubeplayer.css'
 
 
-const YouTubePlayer = ({codes,playlists}) => {
+const YouTubePlayer = ({ codes, playlists }) => {
 
     const [clips, setClips] = useState([]);
     const playerRef = useRef(null);
@@ -19,7 +20,7 @@ const YouTubePlayer = ({codes,playlists}) => {
     const [error, setError] = useState(null);
     const [mode, setMode] = useState('Code'); // Initial mode set to 'Code'
     const [filteredData, setfilteredData] = useState('')
-    const [selectedPlaylist,setSelectedPlaylist] = useState('')
+    const [selectedPlaylist, setSelectedPlaylist] = useState('')
 
     const toggleMode = () => {
         setMode(prevMode => (prevMode === 'Code' ? 'Viewer' : 'Code'));
@@ -33,7 +34,7 @@ const YouTubePlayer = ({codes,playlists}) => {
         backgroundColor: '#007bff',
         color: '#fff',
         border: 'none',
-      };
+    };
 
 
     // Fetch tasks from the API when the component mounts
@@ -44,13 +45,13 @@ const YouTubePlayer = ({codes,playlists}) => {
     }, []);
 
 
-    useEffect(()=>{
+    useEffect(() => {
         const names = [...new Set(clips.map(clip => clip.name))];
         setDistinctNames(names);
         const data = clips.filter(item => item.name === names[0]);
         setfilteredData(data)
         setSelectedPlaylist(playlists[0])
-    },[mode])
+    }, [mode])
 
 
     const opts = {
@@ -143,22 +144,22 @@ const YouTubePlayer = ({codes,playlists}) => {
         };
     }
 
-    const addToPlaylist = async (clip,selectedPlaylist,videoId) => {
+    const addToPlaylist = async (clip, selectedPlaylist, videoId) => {
 
         const data = {
-            clip:clip.id,
-            playlist:selectedPlaylist.id,
+            clip: clip.id,
+            playlist: selectedPlaylist.id,
             video_id: videoId
         }
 
-        const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/playlistclips/",data )
+        const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/playlistclips/", data)
         console.log(data)
-        
-        }
+
+    }
 
 
 
-    
+
 
     // Function to delete a task
     const deleteClip = async (id) => {
@@ -173,70 +174,86 @@ const YouTubePlayer = ({codes,playlists}) => {
     return (
         <>
             <NavBar />
-            <div style={{ marginBottom: '20px' }}>
-                <button onClick={toggleMode} style={buttonStyle}>
-                    Toggle to {mode === 'Code' ? 'Viewer' : 'Code'}
-                </button>
+            <div className='container-fluid'>
+                <div className='row'>
+                    <div className='col-md-6'>
+                        <div className='row'>
+                            <div>
+                                <button onClick={toggleMode} style={buttonStyle}>
+                                    Toggle to {mode === 'Code' ? 'Viewer' : 'Code'}
+                                </button>
+                            </div>
+                            <YouTube videoId={videoId} opts={opts} onReady={onReady} />
+                            <div class="d-flex">
+                            <button onClick={getCurrentTime} class="btn btn-secondary">Get Current Time</button>
+                            <button onClick={togglePlayPause} class="btn btn-secondary">Play/Pause</button>
+                            <button onClick={skipBackward} class="btn btn-secondary">Skip Back 10s</button>
+                            <button onClick={skipForward} class="btn btn-secondary">Skip Forward 10s</button>
+                            </div>
+                        </div>
+                        <div className='row ml-5'>
+                            <h2>Codes</h2>
+                            <div className="mb-1">
+                                {codes.map((code) => (
+                                    <button value={code.code} key={code.id} onClick={createClip}>
+                                        {`${code.code}`}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+                    </div>
+                    <div className='col-md-6'>
+                        <h2>Clips</h2>
+                        <div className="list-group mb-0 scrollable-div">
+                            {clips.map((clip) => (
+                                <li
+                                    key={clip.id}
+                                    className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2 bg-light"
+
+                                >{`${clip.name} @ ${clip.start_time}`}
+                                    <button className="btn btn-secondary" onClick={() => goToClip(clip.start_time)}>Go to Clip</button>
+                                    <button className="btn btn-danger" onClick={() => deleteClip(clip.id)} >Delete Clip</button>
+                                </li>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div>
-                <YouTube videoId={videoId} opts={opts} onReady={onReady} />
                 {mode === 'Code' ? (
                     <>
-                <button onClick={getCurrentTime}>Get Current Time</button>
-                <button onClick={togglePlayPause}>Play/Pause</button>
-                <button onClick={skipBackward}>Skip Back 10s</button>
-                <button onClick={skipForward}>Skip Forward 10s</button>
-                <ul className="list-group mb-0">
-                    {clips.map((clip) => (
-                        <li
-                            key={clip.id}
-                            className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
-
-                        >{`${clip.name} @ ${clip.start_time}`}
-                            <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
-                            <span className="fa fa-times text-danger" onClick={() => deleteClip(clip.id)} ></span>
-                        </li>
-                    ))}
-                </ul>
-                <ul className="list-group mb-0">
-                    {codes.map((code) => (
-                        <button value={code.code} key={code.id} onClick={createClip}>
-                            {`${code.code}`}
-                        </button>
-                    ))}
-                </ul>
-                </>
-                ):(<>
+                    </>
+                ) : (<>
                     <div>Viewer</div>
                     <div>
-                    <label htmlFor="name-select">Select a name:</label>
-                    <select id="name-select" onChange={handleSelectChange}>
-                        {distinctNames.map((name, index) => (
-                            <option key={index} value={name}>
-                                {name}
-                            </option>
-                        ))}
-                    </select>
-                    <label htmlFor="playlist-select">Select a name:</label>
-                    <select id="playlist-select" onChange={handlePlaylistChange}>
-                        {playlists.map((playlist) => (
-                            <option key={playlist.id} value={playlist.name}>
-                                {playlist.name}
-                            </option>
-                        ))}
-                    </select>
-                    {filteredData.map((clip) => (
-                        <li
-                            key={clip.id}
-                            className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
+                        <label htmlFor="name-select">Select a name:</label>
+                        <select id="name-select" onChange={handleSelectChange}>
+                            {distinctNames.map((name, index) => (
+                                <option key={index} value={name}>
+                                    {name}
+                                </option>
+                            ))}
+                        </select>
+                        <label htmlFor="playlist-select">Select a name:</label>
+                        <select id="playlist-select" onChange={handlePlaylistChange}>
+                            {playlists.map((playlist) => (
+                                <option key={playlist.id} value={playlist.name}>
+                                    {playlist.name}
+                                </option>
+                            ))}
+                        </select>
+                        {filteredData.map((clip) => (
+                            <li
+                                key={clip.id}
+                                className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
 
-                        >{`${clip.name} @ ${clip.start_time}`}
-                            <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
-                            <button onClick={(e)=> addToPlaylist(clip,selectedPlaylist,videoId)}>Add to Playlist</button>
-                        </li>
-                    ))}
-                    
-                </div>
+                            >{`${clip.name} @ ${clip.start_time}`}
+                                <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
+                                <button onClick={(e) => addToPlaylist(clip, selectedPlaylist, videoId)}>Add to Playlist</button>
+                            </li>
+                        ))}
+
+                    </div>
                 </>
                 )}
             </div>

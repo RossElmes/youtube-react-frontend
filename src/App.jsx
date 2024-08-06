@@ -4,7 +4,6 @@ import "font-awesome/css/font-awesome.min.css";
 
 import React from 'react';
 import { Route, Routes } from 'react-router-dom';
-import AuthForm from './AuthForm';
 import Profile from './Profile';
 import MatchDetails from './MatchDetails';
 import YouTubePlayer from './YoutubePlayer';
@@ -16,6 +15,8 @@ import Playlist from './Playlist';
 import Codes from "./Codes";
 import Playlistplayer from "./Playlistplayer";
 import SplashPage from "./SplashPage";
+import Register from "./Register";
+import Login from "./Login";
 
 function App() {
 
@@ -38,7 +39,7 @@ function App() {
     return (
         <div className="App">
             <Routes>
-                <Route path="/login" element={<AuthForm />} />
+                <Route path="/login" element={<Login />} />
                 <Route path="/profile" element={<Profile tasks={tasks} />} />
                 <Route path="/" element={<SplashPage />} />
                 <Route path="/matchdetails" element={<MatchDetails tasks={tasks} setTasks={setTasks} />} />
@@ -48,6 +49,7 @@ function App() {
                 <Route path="/editmatch/:matchId" element={<EditMatchForm tasks={tasks} setTasks={setTasks}/>} />
                 <Route path="/codes" element={<Codes codes={codes} setCodes={setCodes} />} />
                 <Route path="/playlistclips/:playlistId" element={<Playlistplayer playlists={playlists}/>} />
+                <Route path="/register" element={<Register/>} />
             </Routes>
         </div>
     );

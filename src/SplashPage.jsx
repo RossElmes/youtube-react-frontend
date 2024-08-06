@@ -10,7 +10,7 @@ const SplashPage = () => {
   };
 
   const handleSignUpClick = () => {
-    navigate('/signup');
+    navigate('/register');
   };
 
   return (
@@ -21,7 +21,7 @@ const SplashPage = () => {
         Gain insights and improve your strategies with our advanced video analysis tools.
       </p>
       <button 
-        className="btn btn-primary btn-lg"
+        className="btn btn-primary btn-lg mb-1"
         onClick={handleLoginClick}
       >
         Login
