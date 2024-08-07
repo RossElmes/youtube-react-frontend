@@ -171,7 +171,7 @@ const EditMatchForm = ({setTasks,tasks}) => {
             <option value="Team2">Team 2</option>
           </select>
         </div>
-        <button type="submit">Add Match</button>
+        <button type="submit">Update Match Details</button>
       </form>
     </div>
     </>
