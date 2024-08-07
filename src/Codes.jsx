@@ -59,7 +59,7 @@ const Codes = ({codes,setCodes}) => {
             onChange={handleChange}
              className="form-control mb-3"
           />
-           <button className="btn btn-secondary" type="submit">Add Match</button>
+           <button className="btn btn-secondary" type="submit">Add New Code</button>
         </div>
        
       </form>
