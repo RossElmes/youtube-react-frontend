@@ -3,14 +3,14 @@ import axios from "axios";
 import Playlist from "./Playlist";
 
 export async function fetchTasks(setTasks){
-    const response = await axios.get("http://127.0.0.1:8000/api/matchdetails/");
+    const response = await axios.get("https://youtubeplayer-django-api.onrender.com/api/matchdetails/");
     const data = await response.data;
     setTasks(data);
 };
 
 // Function to fetch clips from the API
 export async function  fetchClips(setClips,match){
-    const response = await axios.get("http://127.0.0.1:8000/api/matchclips/",{
+    const response = await axios.get("https://youtubeplayer-django-api.onrender.com/api/matchclips/",{
             params: {
                 match:match
             }
@@ -23,7 +23,7 @@ export async function  fetchClips(setClips,match){
 
 // Function to fetch clips from the API
 export async function  fetchCodes(setCodes){
-    const response = await fetch("http://127.0.0.1:8000/api/codes/");
+    const response = await fetch("https://youtubeplayer-django-api.onrender.com/api/codes/");
     const data = await response.json();
     setCodes(data);
 };
@@ -33,7 +33,7 @@ export async function  fetchCodes(setCodes){
 
 // Function to fetch clips from the API
 export async function  fetchPlaylistClips(setPlaylistClips,playlistid,setVideoId){
-    const response = await axios.get("http://127.0.0.1:8000/api/playlistclips/",{      
+    const response = await axios.get("https://youtubeplayer-django-api.onrender.com/api/playlistclips/",{      
         params: {
         playlist:playlistid
         }
@@ -53,7 +53,7 @@ export async function extractYouTubeId(url){
 
 // Function to fetch clips from the API
 export async function  fetchPlaylists(setPlaylists){
-    const response = await axios.get("http://127.0.0.1:8000/api/playlist/");
+    const response = await axios.get("https://youtubeplayer-django-api.onrender.com/api/playlist/");
     const data = await response.data;
     setPlaylists(data);
 };

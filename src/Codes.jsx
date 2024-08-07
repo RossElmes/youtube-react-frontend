@@ -4,6 +4,7 @@ import CodeTable from "./CodeTable";
 import NavBar from "./NavBar";
 import axios from 'axios';
 import { useState } from "react";
+import './Form.css'
 
 const Codes = ({codes,setCodes}) => {
 
@@ -16,7 +17,7 @@ const Codes = ({codes,setCodes}) => {
   // Function to delete a task
   const deleteCodes = async (id,setCodes) => {
     console.log(id)
-    await axios.delete(`http://127.0.0.1:8000/api/codes/${id}/`);
+    await axios.delete(`https://youtubeplayer-django-api.onrender.com/api/codes/${id}/`);
     setCodes((prevCodes) =>prevCodes.filter(prevCode => prevCode.id !== id));
   };
 
@@ -39,7 +40,7 @@ const Codes = ({codes,setCodes}) => {
   };
   
   const createCode = async (newCode) => {
-    const response = await axios.post("http://127.0.0.1:8000/api/codes/",newCode);
+    const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/codes/",newCode);
         setCodes([...codes, response.data]);
       };
       // Function to create a new task
@@ -48,7 +49,7 @@ const Codes = ({codes,setCodes}) => {
     <>
     <NavBar />
     <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-container">
           <label htmlFor="Code">Add new Code</label>
           <input
             type="text"
@@ -56,11 +57,13 @@ const Codes = ({codes,setCodes}) => {
             name="code"
             value={newCode.code}
             onChange={handleChange}
+             className="form-control mb-3"
           />
+           <button className="btn btn-secondary" type="submit">Add New Code</button>
         </div>
-        <button type="submit">Add Match</button>
+       
       </form>
-    <div className="container pt-5">
+    <div className="container">
       <CodeTable headers={headers} rows={codes} deleteCodes={deleteCodes} setCodes={setCodes} />
     </div>
     </>

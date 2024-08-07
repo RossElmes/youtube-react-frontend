@@ -37,7 +37,7 @@ const AddMatchForm = ({ setTasks,tasks}) => {
   };
   
   const createMatch = async (formData) => {
-    const response = await axios.post("http://127.0.0.1:8000/api/matchdetails/",formData);
+    const response = await axios.post("https://youtubeplayer-django-api.onrender.com/api/matchdetails/",formData);
         setTasks([...tasks, response.data]);
       };
       // Function to create a new task

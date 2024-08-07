@@ -32,7 +32,7 @@ const EditMatchForm = ({setTasks,tasks}) => {
 
   const fetchMatch = async (id) => {
     try {
-      const response = await axios.get(`http://127.0.0.1:8000/api/matchdetails/${id}/`)
+      const response = await axios.get(`https://youtubeplayer-django-api.onrender.com/api/matchdetails/${id}/`)
       setMatch(response.data);
     } catch (error) {
       console.error('Error fetching match:', error);
@@ -51,7 +51,7 @@ const EditMatchForm = ({setTasks,tasks}) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`http://127.0.0.1:8000/api/matchdetails/${matchId}/`, match);
+      const response = await axios.put(`https://youtubeplayer-django-api.onrender.com/api/matchdetails/${matchId}/`, match);
       updateTask(response.data);
       navigate('/matchdetails');
     } catch (error) {
@@ -171,7 +171,7 @@ const EditMatchForm = ({setTasks,tasks}) => {
             <option value="Team2">Team 2</option>
           </select>
         </div>
-        <button type="submit">Add Match</button>
+        <button type="submit">Update Match Details</button>
       </form>
     </div>
     </>

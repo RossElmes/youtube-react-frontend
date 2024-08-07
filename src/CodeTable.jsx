@@ -7,7 +7,7 @@ import './Table.css';
 const CodeTable = ({ headers, rows,setCodes,deleteCodes}) => {
 
   return (
-    <table className="table">
+    <table className="table table-bordered table-striped">
       <thead>
         <tr>
           {headers.map((header, index) => (
@@ -22,9 +22,7 @@ const CodeTable = ({ headers, rows,setCodes,deleteCodes}) => {
                 <td key={key}>{row[key]}</td>
               ))}
               <td>
-              </td>
-              <td>
-              <button onClick={() => deleteCodes(row.id,setCodes)}>Delete</button>
+              <button className='btn btn-danger' onClick={() => deleteCodes(row.id,setCodes)}>Delete Code</button>
               </td>
             </tr>
           ))}

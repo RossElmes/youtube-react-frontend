@@ -1,14 +1,14 @@
 // Table.jsx
 
 import React from 'react';
-import './Table.css';
 import { Link } from 'react-router-dom';
 
 
 const MatchDetailTable = ({ headers, rows,setTasks,deleteClip}) => {
 
   return (
-    <table className="table">
+    <>
+    <table className="table table-bordered table-striped">
       <thead>
         <tr>
           {headers.map((header, index) => (
@@ -23,15 +23,17 @@ const MatchDetailTable = ({ headers, rows,setTasks,deleteClip}) => {
                 <td key={key}>{row[key]}</td>
               ))}
               <td>
-              <Link to={`/editmatch/${row.id}`}>Edit</Link>
+              <Link className="btn btn-secondary m-2" to={`/editmatch/${row.id}`}>Edit</Link>
               </td>
               <td>
-              <button onClick={() => deleteClip(row.id,setTasks)}>Delete</button>
+              <button  className="btn btn-danger m-2" onClick={() => deleteClip(row.id,setTasks)}>Delete</button>
               </td>
             </tr>
           ))}
       </tbody>
     </table>
+    </>
+    
   );
 };
 

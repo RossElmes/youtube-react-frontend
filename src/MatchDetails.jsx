@@ -13,7 +13,7 @@ const headers = ['ID','Date of Match', 'Venue', 'Team1', 'Team2','Home Team','Te
   // Function to delete a task
 const deleteClip = async (id,setTasks) => {
   console.log(id)
-  await axios.delete(`http://127.0.0.1:8000/api/matchdetails/${id}/`);
+  await axios.delete(`https://youtubeplayer-django-api.onrender.com/api/matchdetails/${id}/`);
   setTasks((prevTasks) =>prevTasks.filter(prevTask => prevTask.id !== id));
 };
 
@@ -21,8 +21,8 @@ const deleteClip = async (id,setTasks) => {
   return (
     <>
     <NavBar />
-    <div className="container pt-5">
-    <Link to="/addmatch" className="add-button">Add New Match</Link>
+    <div className="container-fluid pt-1">
+    <Link to="/addmatch" className="btn btn-secondary m-2">Add New Match</Link>
       <MatchDetailTable headers={headers} rows={tasks} setTasks={setTasks} deleteClip={deleteClip} />
     </div>
     </>
