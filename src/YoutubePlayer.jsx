@@ -26,17 +26,6 @@ const YouTubePlayer = ({ codes, playlists }) => {
         setMode(prevMode => (prevMode === 'Code' ? 'Viewer' : 'Code'));
     };
 
-    const buttonStyle = {
-        padding: '10px 20px',
-        fontSize: '16px',
-        cursor: 'pointer',
-        borderRadius: '5px',
-        backgroundColor: '#007bff',
-        color: '#fff',
-        border: 'none',
-    };
-
-
     // Fetch tasks from the API when the component mounts
     useEffect(() => {
         fetchClips(setClips, matchId);
