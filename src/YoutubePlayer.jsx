@@ -178,20 +178,19 @@ const YouTubePlayer = ({ codes, playlists }) => {
                 <div className='row'>
                     <div className='col-md-6'>
                         <div className='row'>
-                            <div>
-                                <button onClick={toggleMode} style={buttonStyle}>
+                            <div  className='m-2'>
+                                <button class="btn btn-secondary" onClick={toggleMode}>
                                     Toggle to {mode === 'Code' ? 'Viewer' : 'Code'}
                                 </button>
                             </div>
                             <YouTube videoId={videoId} opts={opts} onReady={onReady} />
                             <div class="d-flex">
-                            <button onClick={getCurrentTime} class="btn btn-secondary">Get Current Time</button>
                             <button onClick={togglePlayPause} class="btn btn-secondary">Play/Pause</button>
-                            <button onClick={skipBackward} class="btn btn-secondary">Skip Back 10s</button>
-                            <button onClick={skipForward} class="btn btn-secondary">Skip Forward 10s</button>
                             </div>
-                        </div>
+                        </div> 
                         <div className='row ml-5'>
+                        {mode === 'Code' ? (
+                            <>
                             <h2>Codes</h2>
                             <div className="mb-1">
                                 {codes.map((code) => (
@@ -199,11 +198,16 @@ const YouTubePlayer = ({ codes, playlists }) => {
                                         {`${code.code}`}
                                     </button>
                                 ))}
-                            </div>
+                            </div> 
+                            </>) : ( <></>)
+
+                            }
                         </div>
                     </div>
                     <div className='col-md-6'>
-                        <h2>Clips</h2>
+                    {mode === 'Code' ? (
+                    <>
+                    <h2>Clips</h2>
                         <div className="list-group mb-0 scrollable-div">
                             {clips.map((clip) => (
                                 <li
@@ -216,46 +220,45 @@ const YouTubePlayer = ({ codes, playlists }) => {
                                 </li>
                             ))}
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div>
-                {mode === 'Code' ? (
-                    <>
                     </>
                 ) : (<>
-                    <div>Viewer</div>
-                    <div>
+                    <h2>Review Clips</h2>
+                    <div className='col mb-4'> 
                         <label htmlFor="name-select">Select a name:</label>
-                        <select id="name-select" onChange={handleSelectChange}>
+                        <select id="name-select" className="form-select" aria-label="Default select example" onChange={handleSelectChange}>
                             {distinctNames.map((name, index) => (
                                 <option key={index} value={name}>
                                     {name}
                                 </option>
                             ))}
                         </select>
-                        <label htmlFor="playlist-select">Select a name:</label>
-                        <select id="playlist-select" onChange={handlePlaylistChange}>
+                        <label htmlFor="playlist-select">Select a Playlist:</label>
+                        <select id="playlist-select" className="form-select" aria-label="Default select example" onChange={handlePlaylistChange}>
                             {playlists.map((playlist) => (
                                 <option key={playlist.id} value={playlist.name}>
                                     {playlist.name}
                                 </option>
                             ))}
                         </select>
+                    </div>
+                    <div className='row'>
+                    <div className="list-group mb-0 scrollable-div">
                         {filteredData.map((clip) => (
                             <li
                                 key={clip.id}
-                                className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2"
+                                className="list-group-item d-flex align-items-center justify-content-between border-0 mb-2 bg-light"
 
                             >{`${clip.name} @ ${clip.start_time}`}
-                                <span className="fa fa-pencil text-success mx-5" onClick={() => goToClip(clip.start_time)}></span>
-                                <button onClick={(e) => addToPlaylist(clip, selectedPlaylist, videoId)}>Add to Playlist</button>
+                                <button className="btn btn-primary" onClick={() => goToClip(clip.start_time)}>Go to Clip</button>
+                                <button className="btn btn-secondary" onClick={(e) => addToPlaylist(clip, selectedPlaylist, videoId)}>Add to Playlist</button>
                             </li>
                         ))}
-
+                    </div>
                     </div>
                 </>
                 )}
+                    </div>
+                </div>
             </div>
         </>
     );

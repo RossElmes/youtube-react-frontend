@@ -4,10 +4,11 @@ import NavBar from "./NavBar";
 import axios from 'axios';
 import { useState } from "react";
 import PlaylistTable from "./PlaylistTable";
+import './Form.css'; 
 
 const Playlist = ({playlists,setPlaylists}) => {
 
-  const headers = ['ID', 'Code'];
+  const headers = ['ID', 'Playlist Name'];
 
   const [Newplaylist, setNewplaylist] = useState({
     name:''  
@@ -47,7 +48,7 @@ const Playlist = ({playlists,setPlaylists}) => {
     <>
     <NavBar />
     <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-container">
           <label htmlFor="Code">Add New Playlist</label>
           <input
             type="text"
@@ -55,11 +56,13 @@ const Playlist = ({playlists,setPlaylists}) => {
             name="name"
             value={Newplaylist.name}
             onChange={handleChange}
+            className="form-control mb-3"
           />
+          <button type="submit" className="btn btn-secondary">Add Playlist</button>
         </div>
-        <button type="submit">Add Playlist</button>
+
       </form>
-    <div className="container pt-5">
+    <div className="container-fluid">
       <PlaylistTable  headers={headers} rows={playlists} deletePlaylists={deletePlaylists} setPlaylists={setPlaylists} />
     </div>
     </>

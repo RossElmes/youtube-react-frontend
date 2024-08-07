@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 const PlaylistTable = ({ headers, rows,setPlaylists,deletePlaylists}) => {
 
   return (
-    <table className="table">
+    <table className="table table-bordered table-striped">
       <thead>
         <tr>
           {headers.map((header, index) => (
@@ -22,10 +22,10 @@ const PlaylistTable = ({ headers, rows,setPlaylists,deletePlaylists}) => {
                 <td key={key}>{row[key]}</td>
               ))}
               <td>
-                <Link to={`/playlistclips/${row.id}`}>Watch Clips</Link>
+                <Link className = 'btn btn-primary' to={`/playlistclips/${row.id}`}>Watch Clips</Link>
               </td>
               <td>
-              <button onClick={() => deletePlaylists(row.id,setPlaylists)}>Delete</button>
+              <button className = 'btn btn-danger' onClick={() => deletePlaylists(row.id,setPlaylists)}>Delete Playlist</button>
               </td>
             </tr>
           ))}

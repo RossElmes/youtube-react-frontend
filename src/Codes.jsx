@@ -4,6 +4,7 @@ import CodeTable from "./CodeTable";
 import NavBar from "./NavBar";
 import axios from 'axios';
 import { useState } from "react";
+import './Form.css'
 
 const Codes = ({codes,setCodes}) => {
 
@@ -48,7 +49,7 @@ const Codes = ({codes,setCodes}) => {
     <>
     <NavBar />
     <form onSubmit={handleSubmit}>
-        <div className="form-group">
+        <div className="form-container">
           <label htmlFor="Code">Add new Code</label>
           <input
             type="text"
@@ -56,11 +57,13 @@ const Codes = ({codes,setCodes}) => {
             name="code"
             value={newCode.code}
             onChange={handleChange}
+             className="form-control mb-3"
           />
+           <button className="btn btn-secondary" type="submit">Add Match</button>
         </div>
-        <button type="submit">Add Match</button>
+       
       </form>
-    <div className="container pt-5">
+    <div className="container">
       <CodeTable headers={headers} rows={codes} deleteCodes={deleteCodes} setCodes={setCodes} />
     </div>
     </>

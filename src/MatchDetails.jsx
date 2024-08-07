@@ -21,8 +21,8 @@ const deleteClip = async (id,setTasks) => {
   return (
     <>
     <NavBar />
-    <div className="container pt-5">
-    <Link to="/addmatch" className="add-button">Add New Match</Link>
+    <div className="container-fluid pt-1">
+    <Link to="/addmatch" className="btn btn-secondary m-2">Add New Match</Link>
       <MatchDetailTable headers={headers} rows={tasks} setTasks={setTasks} deleteClip={deleteClip} />
     </div>
     </>
